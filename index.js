@@ -280,7 +280,7 @@ app.get('/writerbook/:id', Verifytoken, async (req, res) => {
  
 
   } finally {
-    // Ensures that the client will close when you finish/error
+     
     // await client.close();
   }
 }
