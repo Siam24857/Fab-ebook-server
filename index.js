@@ -34,6 +34,10 @@ async function run() {
      const result = await Ebookscollenction.find().toArray()
      res.send(result)
    })
+   app.get('/somebooks', async (req, res) =>{
+     const result = await Ebookscollenction.find().limit(5).toArray()
+     res.send(result)
+   })
 
    app.get('/readerbookhistory/:id', async (req, res) =>{
     const { id } = req.params
