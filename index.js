@@ -27,9 +27,66 @@ async function run() {
     const bookshistorycollection = database.collection("Bookshistory");
     const bookmarkcollection = database.collection("Bookmark");
     const usercollection = database.collection("user");
+    const sessioncollection = database.collection("session");
 
 
+ const Verifytoken = async (req, res, next) => {
+  try {
+    const token = req.headers.authorization;
 
+    if (!token) {
+      return res.status(401).json({ error: "No token provided" });
+    }
+
+    const seissontoken = token.split(" ")[1];
+
+    const seissondata = await sessioncollection.findOne({ token: seissontoken });
+    const quiry = {
+      id: seissondata.id
+    }
+    const userdata = await usercollection.findOne(quiry)
+
+    if (!userdata) {
+      return res.status(401).json({ error: "Invalid token" });
+    }
+
+    req.user = userdata;
+    next();
+  } catch (error) {
+    res.status(500).json({ error: "Auth error" });
+  }
+};
+
+
+const Adminverify = (req, res, next) => {
+  const userrole = req.user.role;
+
+  if (userrole !== "admin") {
+    return res.status(403).json({ error: "Access denied. Admin only." });
+  }
+
+  next();
+};
+
+const Writerverify = (req, res, next) => {
+  const userrole = req.user.role;
+
+  if (userrole !== "writer") {
+    return res.status(403).json({ error: "Access denied. writer only." });
+  }
+
+  next();
+};
+
+const Readerverify = (req, res, next) => {
+  const userrole = req.user.role;
+
+  if (userrole !== "reader") {
+    return res.status(403).json({ error: "Access denied. reader only." });
+  }
+
+  next();
+};
    app.get('/allbooks', async (req, res) =>{
      const result = await Ebookscollenction.find().toArray()
      res.send(result)
@@ -47,7 +104,7 @@ async function run() {
      const result = await bookshistorycollection.find(quiry).toArray()
      res.send(result)
    })
-   app.get('/writerbookhistory/:id', async (req, res) =>{
+   app.get('/writerbookhistory/:id', Verifytoken, Writerverify, async (req, res) =>{
     const { id } = req.params
     const quiry ={
       writerId: id
@@ -56,7 +113,7 @@ async function run() {
      res.send(result)
    })
 
-   app.patch("/ebooks/:id", async (req, res) => {
+   app.patch("/ebooks/:id",Verifytoken,  async (req, res) => {
   const id = req.params.id;
   const updateData = req.body;
 
@@ -70,7 +127,7 @@ async function run() {
   res.send(result);
 });
 
-app.delete("/bookdeleted/:id", async (req, res) => {
+app.delete("/bookdeleted/:id", Verifytoken, async (req, res) => {
     const { id } = req.params;
 
     const result = await Ebookscollenction.deleteOne({
@@ -80,7 +137,7 @@ app.delete("/bookdeleted/:id", async (req, res) => {
     res.send(result);
 });
 
-app.delete("/delteeuser/:id", async (req, res) => {
+app.delete("/delteeuser/:id",Verifytoken, async (req, res) => {
     const { id } = req.params;
 
     const result = await usercollection.deleteOne({
@@ -91,7 +148,7 @@ app.delete("/delteeuser/:id", async (req, res) => {
 });
 
 
-app.delete("/deltebook/:id", async (req, res) => {
+app.delete("/deltebook/:id",Verifytoken,  async (req, res) => {
     const { id } = req.params;
 
     const result = await Ebookscollenction.deleteOne({
@@ -101,7 +158,7 @@ app.delete("/deltebook/:id", async (req, res) => {
     res.send(result);
 });
 
-   app.post('/historybook', async (req, res) =>{
+   app.post('/historybook',Verifytoken,  async (req, res) =>{
     const historydata = req.body
 
     const qury ={
@@ -118,7 +175,7 @@ app.delete("/deltebook/:id", async (req, res) => {
      res.send(result)
    })
 
-   app.post('/createbook', async (req, res) =>{
+   app.post('/createbook', Verifytoken, Writerverify, async (req, res) =>{
     const bookdatas = req.body
      const result = await Ebookscollenction.insertOne(bookdatas)
      res.send(result)
@@ -151,7 +208,7 @@ app.delete("/deltebook/:id", async (req, res) => {
   }
 });
 
-app.get('/bookhistory/:id', async (req, res) => {
+app.get('/bookhistory/:id',Verifytoken, async (req, res) => {
   const { id } = req.params;
 
   const result = await bookshistorycollection.find({ productId: id }).toArray();
@@ -160,7 +217,7 @@ app.get('/bookhistory/:id', async (req, res) => {
 });
 
 
-app.get('/readers/:id', async (req, res) => {
+app.get('/readers/:id',Verifytoken, Readerverify, async (req, res) => {
   const { id } = req.params;
 
   const result = await usercollection.find({ role: id }).toArray();
@@ -168,7 +225,7 @@ app.get('/readers/:id', async (req, res) => {
   res.send(result);
 });
 
-app.patch('/updateuser/:id', async (req, res) => {
+app.patch('/updateuser/:id',Verifytoken, async (req, res) => {
   const { id } = req.params;
   const userdata = req.body;
 
@@ -182,7 +239,7 @@ app.patch('/updateuser/:id', async (req, res) => {
   res.send(result);
 });
 
-app.patch('/updatebook/:id', async (req, res) => {
+app.patch('/updatebook/:id',Verifytoken, async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
 
@@ -196,13 +253,13 @@ app.patch('/updatebook/:id', async (req, res) => {
   res.send(result);
 });
 
-app.get('/historybooks', async (req, res) => {
+app.get('/historybooks',Verifytoken, async (req, res) => {
   const result = await bookshistorycollection.find().toArray();
 
   res.send(result);
 });
 
-app.get('/alluser', async (req, res) => {
+app.get('/alluser', Verifytoken, async (req, res) => {
   const result = await usercollection.find().toArray();
 
   res.send(result);
@@ -210,7 +267,7 @@ app.get('/alluser', async (req, res) => {
 
  
 
-app.get('/writerbook/:id', async (req, res) => {
+app.get('/writerbook/:id', Verifytoken, async (req, res) => {
   const { id } = req.params;
 
   const result = await Ebookscollenction.find({ writerId: id }).toArray();
