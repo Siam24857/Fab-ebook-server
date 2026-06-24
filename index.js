@@ -322,7 +322,8 @@ app.get('/bookdettails/:id', async (req, res) => {
   }
 });
 
-// Get all users (public)
+ 
+
 app.get('/alluser', async (req, res) => {
   try {
     const { usercollection } = await getCollections();
@@ -342,9 +343,7 @@ app.get('/alluser', async (req, res) => {
   }
 });
 
-// ==================== PROTECTED ROUTES ====================
-
-// Reader book history
+ 
 app.get('/readerbookhistory/:id', Verifytoken, async (req, res) => {
   try {
     const { id } = req.params;
@@ -365,7 +364,7 @@ app.get('/readerbookhistory/:id', Verifytoken, async (req, res) => {
   }
 });
 
-// Writer book history
+ 
 app.get('/writerbookhistory/:id', Verifytoken, async (req, res) => {
   try {
     const { id } = req.params;
@@ -386,7 +385,7 @@ app.get('/writerbookhistory/:id', Verifytoken, async (req, res) => {
   }
 });
 
-// Update ebook (PATCH)
+ 
 app.patch("/ebooks/:id", Verifytoken, async (req, res) => {
   try {
     const id = req.params.id;
