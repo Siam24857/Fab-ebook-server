@@ -104,7 +104,7 @@ const Readerverify = (req, res, next) => {
      const result = await bookshistorycollection.find(quiry).toArray()
      res.send(result)
    })
-   app.get('/writerbookhistory/:id', Verifytoken, Writerverify, async (req, res) =>{
+   app.get('/writerbookhistory/:id',   async (req, res) =>{
     const { id } = req.params
     const quiry ={
       writerId: id
@@ -259,7 +259,7 @@ app.get('/historybooks',Verifytoken, async (req, res) => {
   res.send(result);
 });
 
-app.get('/alluser', Verifytoken, async (req, res) => {
+app.get('/alluser',  async (req, res) => {
   const result = await usercollection.find().toArray();
 
   res.send(result);
