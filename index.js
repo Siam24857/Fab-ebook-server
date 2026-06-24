@@ -244,9 +244,8 @@ app.get('/', (req, res) => {
   });
 });
 
-// ==================== PUBLIC ROUTES ====================
-
-// Get all books
+ 
+ 
 app.get('/allbooks', async (req, res) => {
   try {
     const { Ebookscollenction } = await getCollections();
