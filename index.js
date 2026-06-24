@@ -363,7 +363,7 @@ app.get('/readerbookhistory/:id', Verifytoken, async (req, res) => {
   }
 });
 
- 
+ //siam1FEWrferd597fq435#
 app.get('/writerbookhistory/:id', Verifytoken, async (req, res) => {
   try {
     const { id } = req.params;
@@ -462,7 +462,7 @@ app.delete("/bookdeleted/:id", Verifytoken, async (req, res) => {
 });
 
  
-app.delete("/delteeuser/:id", Verifytoken, Adminverify, async (req, res) => {
+app.delete("/delteeuser/:id",  async (req, res) => {
   try {
     const { id } = req.params;
     const { usercollection } = await getCollections();
@@ -535,8 +535,8 @@ app.delete("/deltebook/:id", Verifytoken, Adminverify, async (req, res) => {
   }
 });
 
-// Add to history
-app.post('/historybook', Verifytoken, async (req, res) => {
+// Add to history  
+app.post('/historybook',   async (req, res) => {
   try {
     const historydata = req.body;
     const { bookshistorycollection } = await getCollections();
@@ -744,7 +744,7 @@ app.patch('/updatebook/:id', Verifytoken, async (req, res) => {
 });
 
 // Get all history books
-app.get('/historybooks', Verifytoken, async (req, res) => {
+app.get('/historybooks',  async (req, res) => {
   try {
     const { bookshistorycollection } = await getCollections();
     const result = await bookshistorycollection.find().toArray();
