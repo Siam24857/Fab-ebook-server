@@ -1,20 +1,28 @@
 {
   "name": "all-resourec",
   "version": "1.0.0",
-  "description": "",
+  "description": "E-book API server",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "vercel-build": "echo Hello"
   },
-  "keywords": [],
+  "keywords": [
+    "ebook",
+    "api",
+    "mongodb"
+  ],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
     "cors": "^2.8.6",
-    "dotenv": "^17.4.2",
-    "express": "^5.2.1",
-    "jose-cjs": "^6.2.3",
-    "mongodb": "^7.3.0"
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongodb": "^6.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
   }
 }
