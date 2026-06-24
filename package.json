@@ -1,19 +1,15 @@
 {
-  "name": "all-resourec",
+  "name": "ebook-api",
   "version": "1.0.0",
-  "description": "E-book API server",
+  "description": "E-Book API Server with MongoDB",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "vercel-build": "echo Hello"
+    "vercel-build": "npm install"
   },
-  "keywords": [
-    "ebook",
-    "api",
-    "mongodb"
-  ],
-  "author": "",
+  "keywords": ["ebook", "api", "mongodb", "express"],
+  "author": "Your Name",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
