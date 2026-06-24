@@ -426,8 +426,7 @@ app.patch("/ebooks/:id", Verifytoken, async (req, res) => {
     });
   }
 });
-
-// Delete book
+ 
 app.delete("/bookdeleted/:id", Verifytoken, async (req, res) => {
   try {
     const { id } = req.params;
@@ -464,7 +463,7 @@ app.delete("/bookdeleted/:id", Verifytoken, async (req, res) => {
   }
 });
 
-// Delete user (admin only)
+ 
 app.delete("/delteeuser/:id", Verifytoken, Adminverify, async (req, res) => {
   try {
     const { id } = req.params;
